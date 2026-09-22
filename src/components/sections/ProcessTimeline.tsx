@@ -79,31 +79,34 @@ export function ProcessTimeline() {
   ];
 
   useEffect(() => {
-    if (prefersReduced || !sectionRef.current) return;
+    if (!sectionRef.current) return;
     gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.config({ ignoreMobileResize: true });
 
     const ctx = gsap.context(() => {
       gsap.from(".process-header", {
         scrollTrigger: {
           trigger: ".process-header",
-          start: "top 85%",
+          start: "top 88%",
         },
-        y: 30,
+        y: 28,
         opacity: 0,
-        duration: 0.8,
+        duration: 0.75,
         ease: "power2.out",
       });
 
-      gsap.from(".process-card", {
-        scrollTrigger: {
-          trigger: ".process-cards-container",
-          start: "top 80%",
-        },
-        y: 32,
-        opacity: 0,
-        duration: 0.75,
-        stagger: 0.1,
-        ease: "power2.out",
+      const cards = gsap.utils.toArray<HTMLElement>(".process-card");
+      cards.forEach((card) => {
+        gsap.from(card, {
+          scrollTrigger: {
+            trigger: card,
+            start: "top 88%",
+          },
+          y: 32,
+          opacity: 0,
+          duration: 0.7,
+          ease: "power2.out",
+        });
       });
     }, sectionRef);
 

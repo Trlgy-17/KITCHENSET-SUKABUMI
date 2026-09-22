@@ -1,9 +1,52 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { generateWhatsAppLink } from "@/lib/whatsapp";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export function MaterialEducationSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const prefersReduced = useReducedMotion();
+
+  useEffect(() => {
+    if (prefersReduced || !sectionRef.current) return;
+    gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.config({ ignoreMobileResize: true });
+
+    const ctx = gsap.context(() => {
+      gsap.from(".material-header", {
+        scrollTrigger: {
+          trigger: ".material-header",
+          start: "top 88%",
+        },
+        y: 28,
+        opacity: 0,
+        duration: 0.75,
+        ease: "power2.out",
+      });
+
+      const cards = gsap.utils.toArray<HTMLElement>(".material-card");
+      cards.forEach((card) => {
+        gsap.from(card, {
+          scrollTrigger: {
+            trigger: card,
+            start: "top 90%",
+          },
+          y: 28,
+          opacity: 0,
+          duration: 0.65,
+          ease: "power2.out",
+        });
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, [prefersReduced]);
+
   const materials = [
     {
       category: "KAYU OLAHAN INTI",
@@ -36,10 +79,14 @@ export function MaterialEducationSection() {
   ];
 
   return (
-    <section id="materials" className="py-24 md:py-32 bg-[#F4F1EA] border-b border-[#DCD5CA]">
+    <section
+      id="materials"
+      ref={sectionRef}
+      className="py-24 md:py-32 bg-[#F4F1EA] border-b border-[#DCD5CA]"
+    >
       <div className="max-w-[1320px] mx-auto px-5 sm:px-8 lg:px-10">
         {/* Section Header */}
-        <div className="max-w-3xl mb-14 md:mb-18 space-y-3.5">
+        <div className="material-header max-w-3xl mb-14 md:mb-18 space-y-3.5">
           <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8A6248] block">
             EDUKASI MATERIAL
           </span>
@@ -59,7 +106,7 @@ export function MaterialEducationSection() {
           {materials.map((mat) => (
             <div
               key={mat.title}
-              className="rounded-[18px] border border-[#DCD5CA] bg-[#FAF8F3] overflow-hidden flex flex-col justify-between hover:border-[#181715] transition-all duration-300 shadow-sm hover:shadow-ambient group"
+              className="material-card rounded-[18px] border border-[#DCD5CA] bg-[#FAF8F3] overflow-hidden flex flex-col justify-between hover:border-[#181715] transition-all duration-300 shadow-sm hover:shadow-ambient card-lift-60fps group"
             >
               <div>
                 {/* Image Container with Dark Pill Badge */}

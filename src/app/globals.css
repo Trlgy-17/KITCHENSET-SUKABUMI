@@ -133,8 +133,9 @@ nextjs-portal,
 .card-lift-60fps:hover {
   transform: translateY(-4px);
 }
-.card-lift-60fps:hover::after {
-  opacity: 1;
+.card-lift-60fps:active {
+  transform: scale(0.985);
+  transition: transform 150ms ease;
 }
 
 /* ==========================================================================
@@ -159,22 +160,16 @@ nextjs-portal,
    ACCESSIBLE ANIMATION (Tiered Reduced Motion Safety Net)
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+  /* Tier 1: Disable high-frequency continuous loops */
+  .animate-spin,
+  .animate-bounce,
+  .animate-pulse {
+    animation: none !important;
   }
 
-  /* Tier 2: Allow soft opacity transitions so elements don't teleport */
-  .transition-opacity,
-  [data-motion-fade="true"] {
-    transition: opacity 150ms ease !important;
-  }
-
+  /* Tier 2: Prevent extreme transforms while maintaining smooth opacity */
   .card-lift-60fps:hover {
     transform: none !important;
   }
 }
+

@@ -18,14 +18,26 @@ export function FeaturedPortfolio() {
   const p3 = PROJECTS_DATA[3]; // Backdrop TV Cibadak
 
   useEffect(() => {
-    if (prefersReduced || !sectionRef.current) return;
+    if (!sectionRef.current) return;
     gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.config({ ignoreMobileResize: true });
 
     const ctx = gsap.context(() => {
+      gsap.from(".portfolio-header", {
+        scrollTrigger: {
+          trigger: ".portfolio-header",
+          start: "top 88%",
+        },
+        y: 28,
+        opacity: 0,
+        duration: 0.7,
+        ease: "power2.out",
+      });
+
       gsap.from(".portfolio-hero-card", {
         scrollTrigger: {
-          trigger: ".portfolio-grid",
-          start: "top 80%",
+          trigger: ".portfolio-hero-card",
+          start: "top 85%",
         },
         y: 35,
         opacity: 0,
@@ -33,16 +45,18 @@ export function FeaturedPortfolio() {
         ease: "power2.out",
       });
 
-      gsap.from(".portfolio-side-card", {
-        scrollTrigger: {
-          trigger: ".portfolio-grid",
-          start: "top 75%",
-        },
-        y: 30,
-        opacity: 0,
-        duration: 0.7,
-        stagger: 0.15,
-        ease: "power2.out",
+      const sideCards = gsap.utils.toArray<HTMLElement>(".portfolio-side-card");
+      sideCards.forEach((card) => {
+        gsap.from(card, {
+          scrollTrigger: {
+            trigger: card,
+            start: "top 88%",
+          },
+          y: 30,
+          opacity: 0,
+          duration: 0.7,
+          ease: "power2.out",
+        });
       });
     }, sectionRef);
 
@@ -57,7 +71,7 @@ export function FeaturedPortfolio() {
     >
       <div className="max-w-[1320px] mx-auto px-5 sm:px-8 lg:px-10">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-14 gap-4">
+        <div className="portfolio-header flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-14 gap-4">
           <div className="space-y-2.5">
             <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8A6248] block">
               SELECTED PROJECTS

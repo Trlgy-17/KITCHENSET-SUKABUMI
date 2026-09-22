@@ -8,6 +8,7 @@ import { generateWhatsAppLink } from "@/lib/whatsapp";
 import { AsciiCadBadge } from "@/components/ui/AsciiCadBadge";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -22,9 +23,12 @@ export function HeroSection() {
 
   // GSAP Sequenced Timeline for Hero
   useEffect(() => {
-    if (prefersReduced || !containerRef.current) return;
+    if (!containerRef.current) return;
+    gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.config({ ignoreMobileResize: true });
 
     const ctx = gsap.context(() => {
+      const isMobile = window.innerWidth < 1024;
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
       tl.from(".hero-telemetry", {
@@ -59,8 +63,10 @@ export function HeroSection() {
             stagger: 0.1,
           },
           "-=0.3"
-        )
-        .from(
+        );
+
+      if (!isMobile) {
+        tl.from(
           ".hero-image-wrap",
           {
             opacity: 0,
@@ -70,6 +76,19 @@ export function HeroSection() {
           },
           "-=0.6"
         );
+      } else {
+        gsap.from(".hero-image-wrap", {
+          scrollTrigger: {
+            trigger: ".hero-image-wrap",
+            start: "top 92%",
+          },
+          opacity: 0,
+          scale: 0.97,
+          y: 24,
+          duration: 0.8,
+          ease: "power2.out",
+        });
+      }
     }, containerRef);
 
     return () => ctx.revert();

@@ -77,42 +77,45 @@ export function ServicesSection() {
 
   // GSAP ScrollTrigger for staggered editorial reveals
   useEffect(() => {
-    if (prefersReduced || !sectionRef.current) return;
+    if (!sectionRef.current) return;
     gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.config({ ignoreMobileResize: true });
 
     const ctx = gsap.context(() => {
       gsap.from(".service-header", {
         scrollTrigger: {
           trigger: ".service-header",
-          start: "top 85%",
+          start: "top 88%",
         },
-        y: 30,
+        y: 28,
         opacity: 0,
-        duration: 0.8,
+        duration: 0.75,
         ease: "power2.out",
       });
 
       gsap.from(".service-primary", {
         scrollTrigger: {
           trigger: ".service-primary",
-          start: "top 80%",
+          start: "top 85%",
         },
-        y: 40,
+        y: 35,
         opacity: 0,
-        duration: 0.9,
+        duration: 0.85,
         ease: "power2.out",
       });
 
-      gsap.from(".service-card", {
-        scrollTrigger: {
-          trigger: ".service-cards-container",
-          start: "top 80%",
-        },
-        y: 30,
-        opacity: 0,
-        duration: 0.7,
-        stagger: 0.15,
-        ease: "power2.out",
+      const cards = gsap.utils.toArray<HTMLElement>(".service-card");
+      cards.forEach((card) => {
+        gsap.from(card, {
+          scrollTrigger: {
+            trigger: card,
+            start: "top 88%",
+          },
+          y: 28,
+          opacity: 0,
+          duration: 0.65,
+          ease: "power2.out",
+        });
       });
     }, sectionRef);
 

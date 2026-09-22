@@ -48,20 +48,34 @@ export function WhyUsSection() {
   ];
 
   useEffect(() => {
-    if (prefersReduced || !sectionRef.current) return;
+    if (!sectionRef.current) return;
     gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.config({ ignoreMobileResize: true });
 
     const ctx = gsap.context(() => {
-      gsap.from(".reason-item", {
+      gsap.from(".why-header", {
         scrollTrigger: {
-          trigger: ".reasons-grid",
-          start: "top 80%",
+          trigger: ".why-header",
+          start: "top 88%",
         },
-        y: 25,
+        y: 28,
         opacity: 0,
-        duration: 0.7,
-        stagger: 0.1,
+        duration: 0.75,
         ease: "power2.out",
+      });
+
+      const items = gsap.utils.toArray<HTMLElement>(".reason-item");
+      items.forEach((item) => {
+        gsap.from(item, {
+          scrollTrigger: {
+            trigger: item,
+            start: "top 90%",
+          },
+          y: 25,
+          opacity: 0,
+          duration: 0.65,
+          ease: "power2.out",
+        });
       });
     }, sectionRef);
 
@@ -75,7 +89,7 @@ export function WhyUsSection() {
     >
       <div className="max-w-[1320px] mx-auto px-5 sm:px-8 lg:px-10">
         {/* Section Header with Lottie Guarantee Badge */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 md:mb-20">
+        <div className="why-header flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 md:mb-20">
           <div className="max-w-3xl space-y-4">
             <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8A6248] block">
               KENAPA KITCHENSET SUKABUMI

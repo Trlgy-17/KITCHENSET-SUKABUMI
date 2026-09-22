@@ -1,13 +1,60 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useRef } from "react";
 import Image from "next/image";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export function AboutSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const prefersReduced = useReducedMotion();
+
+  useEffect(() => {
+    if (prefersReduced || !sectionRef.current) return;
+    gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.config({ ignoreMobileResize: true });
+
+    const ctx = gsap.context(() => {
+      gsap.from(".about-text", {
+        scrollTrigger: {
+          trigger: ".about-text",
+          start: "top 88%",
+        },
+        y: 28,
+        opacity: 0,
+        duration: 0.75,
+        ease: "power2.out",
+      });
+
+      const cards = gsap.utils.toArray<HTMLElement>(".about-photo-col");
+      cards.forEach((card) => {
+        gsap.from(card, {
+          scrollTrigger: {
+            trigger: card,
+            start: "top 90%",
+          },
+          y: 30,
+          opacity: 0,
+          duration: 0.7,
+          ease: "power2.out",
+        });
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, [prefersReduced]);
+
   return (
-    <section id="about" className="py-24 md:py-32 bg-[#F4F1EA] border-b border-[#DCD5CA]">
+    <section
+      id="about"
+      ref={sectionRef}
+      className="py-24 md:py-32 bg-[#F4F1EA] border-b border-[#DCD5CA]"
+    >
       <div className="max-w-[1320px] mx-auto px-5 sm:px-8 lg:px-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           {/* Left Text Column */}
-          <div className="lg:col-span-6 space-y-6 sm:space-y-7">
+          <div className="about-text lg:col-span-6 space-y-6 sm:space-y-7">
             <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8A6248] block">
               TENTANG KITCHENSET SUKABUMI
             </span>
@@ -62,7 +109,7 @@ export function AboutSection() {
 
           {/* Right Photographic Storytelling Grid */}
           <div className="lg:col-span-6 grid grid-cols-2 gap-4 sm:gap-5">
-            <div className="space-y-4">
+            <div className="about-photo-col space-y-4">
               <div className="relative aspect-[4/5] rounded-[16px] overflow-hidden border border-[#DCD5CA] bg-[#FAF8F3]">
                 <Image
                   src="/about/workshop-fabrikasi.webp"
@@ -82,7 +129,7 @@ export function AboutSection() {
               </div>
             </div>
 
-            <div className="space-y-4 pt-6">
+            <div className="about-photo-col space-y-4 pt-6">
               <div className="p-4 rounded-[12px] bg-[#FAF8F3] border border-[#DCD5CA]">
                 <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#8A6248] block">
                   02 / Instalasi &amp; Serah Terima
