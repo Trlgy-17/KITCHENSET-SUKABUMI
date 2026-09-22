@@ -82,6 +82,21 @@ export function BeforeAfterSection() {
     }
   };
 
+  // Dynamic responsive opacity and scale based on slider movement (sesuai pergerakan pergeseran)
+  // "Sebelum Renovasi" is on the left: as slider moves left (< 30%), it fades out smoothly to 0 at <= 10%
+  const sebelumOpacity = Math.max(0, Math.min(1, (sliderPosition - 10) / 20));
+
+  // "Sesudah (Hasil Jadi)" is on the right: as slider moves right (> 70%), it fades out smoothly to 0 at >= 90%
+  const sesudahOpacity = Math.max(0, Math.min(1, (90 - sliderPosition) / 20));
+
+  // Smooth CSS transition when dragging vs when clicking presets
+  const badgeTransition = isDragging
+    ? "none"
+    : "opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)";
+
+  // Hint overlay fades out smoothly while actively dragging
+  const hintOpacity = isDragging ? 0 : 0.95;
+
   return (
     <section id="transformation" className="py-20 md:py-28 bg-[#F4F1EA] border-b border-[#D8D2C7]">
       <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -220,24 +235,42 @@ export function BeforeAfterSection() {
             </div>
           </div>
 
-          {/* Persistent Floating Badges - Fixed zIndex 30 above all layers, solid background so GPU never drops it */}
+          {/* "Sebelum Renovasi" Badge - Animates and disappears dynamically as slider moves left */}
           <div
-            style={{ zIndex: 30 }}
-            className="absolute bottom-3 sm:bottom-5 left-3 sm:left-5 px-3.5 sm:px-4 py-1.5 rounded-full bg-[#181715] text-[#FCFBF8] text-[10px] sm:text-[11px] font-bold tracking-[0.08em] uppercase border border-white/20 shadow-lg pointer-events-none select-none"
+            style={{
+              zIndex: 30,
+              opacity: sebelumOpacity,
+              transform: `translateY(${(1 - sebelumOpacity) * 8}px) scale(${0.92 + 0.08 * sebelumOpacity})`,
+              transition: badgeTransition,
+              pointerEvents: sebelumOpacity < 0.05 ? "none" : "auto",
+            }}
+            className="absolute bottom-3 sm:bottom-5 left-3 sm:left-5 px-3.5 sm:px-4 py-1.5 rounded-full bg-[#181715] text-[#FCFBF8] text-[10px] sm:text-[11px] font-bold tracking-[0.08em] uppercase border border-white/20 shadow-lg select-none will-change-[opacity,transform]"
           >
             Sebelum Renovasi
           </div>
+
+          {/* "Sesudah (Hasil Jadi)" Badge - Animates and disappears dynamically as slider moves right */}
           <div
-            style={{ zIndex: 30 }}
-            className="absolute bottom-3 sm:bottom-5 right-3 sm:right-5 px-3.5 sm:px-4 py-1.5 rounded-full bg-[#181715] text-[#FCFBF8] text-[10px] sm:text-[11px] font-bold tracking-[0.08em] uppercase border border-white/20 shadow-lg pointer-events-none select-none"
+            style={{
+              zIndex: 30,
+              opacity: sesudahOpacity,
+              transform: `translateY(${(1 - sesudahOpacity) * 8}px) scale(${0.92 + 0.08 * sesudahOpacity})`,
+              transition: badgeTransition,
+              pointerEvents: sesudahOpacity < 0.05 ? "none" : "auto",
+            }}
+            className="absolute bottom-3 sm:bottom-5 right-3 sm:right-5 px-3.5 sm:px-4 py-1.5 rounded-full bg-[#181715] text-[#FCFBF8] text-[10px] sm:text-[11px] font-bold tracking-[0.08em] uppercase border border-white/20 shadow-lg select-none will-change-[opacity,transform]"
           >
             Sesudah (Hasil Jadi)
           </div>
 
-          {/* Hint Overlay - Fixed zIndex 30 above divider line */}
+          {/* Hint Overlay - Smoothly hides while user is actively dragging */}
           <div
-            style={{ zIndex: 30 }}
-            className="absolute top-3.5 sm:top-4 left-1/2 -translate-x-1/2 px-3.5 py-1.5 rounded-full bg-[#181715] text-white text-[11px] font-medium tracking-wide pointer-events-none flex items-center gap-2 shadow-lg border border-white/20 select-none whitespace-nowrap"
+            style={{
+              zIndex: 30,
+              opacity: hintOpacity,
+              transition: "opacity 0.25s ease-out",
+            }}
+            className="absolute top-3.5 sm:top-4 left-1/2 -translate-x-1/2 px-3.5 py-1.5 rounded-full bg-[#181715]/90 backdrop-blur-md text-white text-[11px] font-medium tracking-wide pointer-events-none flex items-center gap-2 shadow-lg border border-white/20 select-none whitespace-nowrap"
           >
             <SlidersHorizontal className="w-3.5 h-3.5 text-[#A86E4C]" />
             <span>Tarik atau klik untuk menggeser</span>
