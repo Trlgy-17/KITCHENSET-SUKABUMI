@@ -8,6 +8,11 @@
     --foreground: #181715;
   }
 
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px;
+  }
+
   body {
     background-color: var(--background);
     color: var(--foreground);
@@ -32,6 +37,17 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #8A6248;
+}
+
+/* Hide scrollbar utility for mobile horizontal scroll pills */
+.no-scrollbar::-webkit-scrollbar,
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar,
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* ==========================================================================

@@ -133,7 +133,7 @@ export default function RootLayout({
       </head>
       <body className={`${manrope.variable} ${instrumentSerif.variable} font-sans min-h-screen flex flex-col antialiased bg-[#F4F1EA] text-[#181715]`}>
         <Header />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1 pb-20 lg:pb-0">{children}</main>
         <Footer />
         <FloatingWhatsApp />
       </body>

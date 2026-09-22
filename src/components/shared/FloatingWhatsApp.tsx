@@ -20,7 +20,7 @@ export function FloatingWhatsApp() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end print:hidden gpu-layer">
+    <div className="hidden lg:flex fixed bottom-6 right-6 z-50 flex-col items-end print:hidden gpu-layer">
       {/* Quick message card tooltip with Glassmorphism */}
       <AnimatePresence>
         {isOpen && (

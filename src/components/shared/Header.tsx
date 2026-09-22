@@ -76,6 +76,18 @@ export function Header() {
     return () => window.removeEventListener("resize", handleResize);
   }, [updateIndicator]);
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
+
   // Initial detection from pathname / hash
   useEffect(() => {
     setMobileMenuOpen(false);
@@ -97,6 +109,27 @@ export function Header() {
       setActiveNav("Home");
     } else {
       setActiveNav("");
+    }
+  }, [pathname]);
+
+  // Cross-page anchor scrolling (e.g. from /portfolio to /#services)
+  useEffect(() => {
+    if (pathname === "/") {
+      const hash = window.location.hash.replace("#", "");
+      if (hash) {
+        const timer = setTimeout(() => {
+          const el = document.getElementById(hash);
+          if (el) {
+            const headerOffset = 76;
+            const elementPosition = el.getBoundingClientRect().top + window.scrollY;
+            window.scrollTo({
+              top: Math.max(0, elementPosition - headerOffset),
+              behavior: "smooth",
+            });
+          }
+        }, 150);
+        return () => clearTimeout(timer);
+      }
     }
   }, [pathname]);
 
@@ -139,7 +172,7 @@ export function Header() {
       for (const sec of sections) {
         const el = document.getElementById(sec.id);
         if (el) {
-          const top = el.offsetTop;
+          const top = el.getBoundingClientRect().top + window.scrollY;
           if (scrollPos >= top) {
             setActiveNav(sec.name);
             return;
@@ -158,17 +191,21 @@ export function Header() {
     item: NavItem
   ) => {
     setActiveNav(item.name);
+    document.body.style.overflow = "";
+    setMobileMenuOpen(false);
 
     isUserClickingRef.current = true;
     if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
     clickTimeoutRef.current = setTimeout(() => {
       isUserClickingRef.current = false;
-    }, 800);
+    }, 1000);
 
     if (pathname === "/") {
       if (item.href === "/" || item.sectionId === "hero") {
         e.preventDefault();
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        requestAnimationFrame(() => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
         history.pushState(null, "", "/");
         return;
       }
@@ -178,13 +215,14 @@ export function Header() {
         if (el) {
           e.preventDefault();
           const headerOffset = 76;
-          const elementPosition = el.getBoundingClientRect().top;
-          const offsetPosition =
-            elementPosition + window.pageYOffset - headerOffset;
+          const elementPosition = el.getBoundingClientRect().top + window.scrollY;
+          const offsetPosition = Math.max(0, elementPosition - headerOffset);
 
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: "smooth",
+          requestAnimationFrame(() => {
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: "smooth",
+            });
           });
           history.pushState(null, "", `#${item.sectionId}`);
         }
@@ -307,62 +345,84 @@ export function Header() {
           </div>
         </div>
 
-        {/* Mobile Drawer with AnimatePresence & Glassmorphism */}
+        {/* Mobile Drawer Overlay with AnimatePresence */}
         <AnimatePresence>
           {mobileMenuOpen && (
-            <motion.div
-              id="mobile-navigation"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: prefersReduced ? 0.15 : 0.25, ease: [0.16, 1, 0.3, 1] }}
-              className="lg:hidden overflow-hidden glass-surface border-b border-[#DCD5CA] shadow-ambient px-5 py-5 space-y-4"
-            >
-              <div className="flex flex-col space-y-1">
-                {navItems.map((item) => {
-                  const isActive = activeNav === item.name;
-                  return (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      onClick={(e) => {
-                        handleNavClick(e, item);
-                        setMobileMenuOpen(false);
-                      }}
-                      className={`text-sm font-medium tracking-normal px-4 py-3 rounded-[10px] flex items-center justify-between transition-all active:scale-[0.98] ${
-                        isActive
-                          ? "bg-[#FAF8F3] text-[#181715] font-semibold border border-[#DCD5CA]"
-                          : "text-[#656159] hover:bg-[#FAF8F3] hover:text-[#181715]"
-                      }`}
-                    >
-                      <span>{item.name}</span>
-                      {isActive && (
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#8A6248]" />
-                      )}
-                    </Link>
-                  );
-                })}
-              </div>
+            <>
+              {/* Backdrop */}
+              <motion.div
+                key="mobile-backdrop"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: prefersReduced ? 0.1 : 0.2 }}
+                onClick={() => {
+                  document.body.style.overflow = "";
+                  setMobileMenuOpen(false);
+                }}
+                className="lg:hidden fixed inset-0 top-[76px] bg-black/40 backdrop-blur-xs z-30"
+              />
 
-              <div className="pt-2 flex flex-col gap-2.5">
-                <Link
-                  href="/jadwalkan-survei"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full h-[48px] rounded-[10px] bg-[#181715] text-white flex items-center justify-center text-xs font-semibold tracking-wider uppercase active:scale-[0.98] transition-transform"
-                >
-                  Jadwalkan Survei
-                </Link>
-                <a
-                  href={generateWhatsAppLink()}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full h-[48px] rounded-[10px] border border-[#DCD5CA] bg-[#FAF8F3] text-[#181715] flex items-center justify-center text-xs font-semibold tracking-normal active:scale-[0.98] transition-transform"
-                >
-                  <MessageCircle className="w-4 h-4 mr-2 text-[#25D366]" />
-                  Konsultasi WhatsApp ({contact.whatsappDisplay})
-                </a>
-              </div>
-            </motion.div>
+              {/* Drawer Container */}
+              <motion.div
+                key="mobile-drawer"
+                id="mobile-navigation"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: prefersReduced ? 0.15 : 0.25, ease: [0.16, 1, 0.3, 1] }}
+                className="lg:hidden absolute top-[76px] inset-x-0 z-40 bg-[#FAF8F3] border-b border-[#DCD5CA] shadow-2xl px-5 py-5 space-y-4 max-h-[calc(100dvh-88px)] overflow-y-auto overscroll-contain"
+              >
+                <div className="flex flex-col space-y-1">
+                  {navItems.map((item) => {
+                    const isActive = activeNav === item.name;
+                    return (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        onClick={(e) => handleNavClick(e, item)}
+                        className={`text-sm font-medium tracking-normal px-4 py-3 rounded-[10px] flex items-center justify-between transition-all active:scale-[0.98] ${
+                          isActive
+                            ? "bg-[#FAF8F3] text-[#181715] font-semibold border border-[#DCD5CA]"
+                            : "text-[#656159] hover:bg-[#FAF8F3] hover:text-[#181715]"
+                        }`}
+                      >
+                        <span>{item.name}</span>
+                        {isActive && (
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#8A6248]" />
+                        )}
+                      </Link>
+                    );
+                  })}
+                </div>
+
+                <div className="pt-2 flex flex-col gap-2.5">
+                  <Link
+                    href="/jadwalkan-survei"
+                    onClick={() => {
+                      document.body.style.overflow = "";
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full h-[48px] rounded-[10px] bg-[#181715] text-white flex items-center justify-center text-xs font-semibold tracking-wider uppercase active:scale-[0.98] transition-transform shadow-xs"
+                  >
+                    Jadwalkan Survei
+                  </Link>
+                  <a
+                    href={generateWhatsAppLink()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => {
+                      document.body.style.overflow = "";
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full h-[48px] rounded-[10px] border border-[#DCD5CA] bg-[#FAF8F3] text-[#181715] flex items-center justify-center text-xs font-semibold tracking-normal active:scale-[0.98] transition-transform shadow-xs"
+                  >
+                    <MessageCircle className="w-4 h-4 mr-2 text-[#25D366]" />
+                    Konsultasi WhatsApp ({contact.whatsappDisplay})
+                  </a>
+                </div>
+              </motion.div>
+            </>
           )}
         </AnimatePresence>
       </header>
