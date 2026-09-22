@@ -1,0 +1,50 @@
+export const contact = {
+  whatsappDisplay: "0812-2497-7989",
+  whatsappInternational: "6281224977989",
+  whatsappUrl: "https://wa.me/6281224977989",
+  instagramHandle: "@kitchensetsukabumi.id",
+  instagramUrl: "https://www.instagram.com/kitchensetsukabumi.id/",
+};
+
+export const SITE_CONFIG = {
+  name: "KitchenSet Sukabumi",
+  legalName: "KitchenSet Sukabumi",
+  domain: "kitchensetsukabumi.id",
+  url: "https://kitchensetsukabumi.id",
+  tagline: "Custom Interior & Kitchen Set Sukabumi",
+  description:
+    "Jasa kitchen set dan interior custom di Sukabumi. Mulai dari konsultasi, survei, desain, pemilihan material, produksi hingga instalasi dengan alur kerja dan RAB yang transparan.",
+  phone: "+62 812-2497-7989",
+  whatsappNumber: contact.whatsappInternational,
+  displayPhone: contact.whatsappDisplay,
+  email: "halo@kitchensetsukabumi.id",
+  instagram: contact.instagramHandle,
+  instagramUrl: contact.instagramUrl,
+  address: {
+    street: "Jl. Bhayangkara, Gunungpuyuh",
+    city: "Kota Sukabumi",
+    region: "Jawa Barat",
+    postalCode: "43123",
+    country: "ID",
+  },
+  operatingHours: "Senin - Sabtu: 08.30 - 17.30 WIB (Minggu dengan janji temu)",
+  serviceAreas: [
+    "Kota Sukabumi",
+    "Cisaat",
+    "Cibadak",
+    "Cicurug",
+    "Palabuhanratu",
+    "Sukaraja",
+    "Parungkuda",
+  ],
+  warranty: "Garansi Pemeliharaan 6 Bulan",
+  navLinks: [
+    { name: "Home", href: "/" },
+    { name: "Tentang Kami", href: "/tentang-kami" },
+    { name: "Layanan", href: "/layanan" },
+    { name: "Portfolio", href: "/portfolio" },
+    { name: "Proses", href: "/proses" },
+    { name: "Material", href: "/material" },
+    { name: "FAQ", href: "/faq" },
+  ],
+};

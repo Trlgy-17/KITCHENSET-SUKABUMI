@@ -1,0 +1,50 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Testing & Builds
+/coverage
+/.next/
+/out/
+/build
+
+# Production lead database
+leads-db.json
+
+# Environment files
+.env*.local
+.env
+.env.production
+.env.development
+
+# Debug & Temporary Manifests
+bootstrapped.json
+curation_plan.json
+enhanced_drive_manifest.json
+gdrive.html
+gdrive_manifest.json
+local_portfolio_manifest.json
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS Files
+.DS_Store
+*.pem
+Thumbs.db
+
+# TypeScript
+*.tsbuildinfo
+
+# AI / local agent tooling
+.agents/
+skills-lock.json
+
+# Raw project assets - local only
+/KITCHEN/
+/Material/
+/PROSES/
+/Portofolio/
+/TENTANG KAMI/

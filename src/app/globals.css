@@ -1,0 +1,154 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #F4F1EA;
+    --foreground: #181715;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+}
+
+/* Subtle architectural scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F4F1EA;
+}
+::-webkit-scrollbar-thumb {
+  background: #DCD5CA;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #8A6248;
+}
+
+/* ==========================================================================
+   GLASSMORPHISM (Frosted & Liquid Glass UI)
+   ========================================================================== */
+.glass-surface {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow:
+    0 8px 32px rgba(24, 23, 21, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.03);
+}
+
+.glass-surface-dark {
+  background: rgba(24, 23, 21, 0.82);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.glass-pill {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 20px rgba(24, 23, 21, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* Fallback for browsers without backdrop-filter */
+@supports not ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+  .glass-surface {
+    background: #FFFFFF;
+  }
+  .glass-surface-dark {
+    background: #181715;
+  }
+  .glass-pill {
+    background: #FFFFFF;
+  }
+}
+
+/* ==========================================================================
+   60FPS ANIMATION (GPU Compositor & Zero Layout Thrashing)
+   ========================================================================== */
+.gpu-layer {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+}
+
+/* Fast compositor-only shadow lift using ::after opacity to prevent layout repainting */
+.card-lift-60fps {
+  position: relative;
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+.card-lift-60fps::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 16px 36px -8px rgba(24, 23, 21, 0.12);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-lift-60fps:hover {
+  transform: translateY(-4px);
+}
+.card-lift-60fps:hover::after {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   SVG ANIMATION (Architectural Stroke Draw-on)
+   ========================================================================== */
+@keyframes svg-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-svg-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: svg-draw 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ==========================================================================
+   ACCESSIBLE ANIMATION (Tiered Reduced Motion Safety Net)
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Tier 2: Allow soft opacity transitions so elements don't teleport */
+  .transition-opacity,
+  [data-motion-fade="true"] {
+    transition: opacity 150ms ease !important;
+  }
+
+  .card-lift-60fps:hover {
+    transform: none !important;
+  }
+}
