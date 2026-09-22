@@ -177,10 +177,6 @@ export function BeforeAfterSection() {
               draggable={false}
               priority
             />
-            {/* After Floating Tag */}
-            <div className="absolute bottom-5 right-5 z-10 px-4 py-1.5 rounded-full bg-[#171715]/85 backdrop-blur-md text-[#FCFBF8] text-[11px] font-bold tracking-[0.08em] uppercase border border-white/10 shadow-sm pointer-events-none">
-              Sesudah (Hasil Jadi)
-            </div>
           </div>
 
           {/* BEFORE Image (Top Layer clipped via GPU hardware-accelerated clipPath) */}
@@ -202,10 +198,14 @@ export function BeforeAfterSection() {
               draggable={false}
               priority
             />
-            {/* Before Floating Tag */}
-            <div className="absolute bottom-5 left-5 z-10 px-4 py-1.5 rounded-full bg-[#171715]/85 backdrop-blur-md text-[#FCFBF8] text-[11px] font-bold tracking-[0.08em] uppercase border border-white/10 shadow-sm pointer-events-none">
-              Sebelum Renovasi
-            </div>
+          </div>
+
+          {/* Persistent Floating Badges - Placed at z-25 above both layers so they NEVER disappear or get clipped when dragged */}
+          <div className="absolute bottom-3 sm:bottom-5 left-3 sm:left-5 z-25 px-3.5 sm:px-4 py-1.5 rounded-full bg-[#171715]/90 backdrop-blur-md text-[#FCFBF8] text-[10px] sm:text-[11px] font-bold tracking-[0.08em] uppercase border border-white/15 shadow-md pointer-events-none">
+            Sebelum Renovasi
+          </div>
+          <div className="absolute bottom-3 sm:bottom-5 right-3 sm:right-5 z-25 px-3.5 sm:px-4 py-1.5 rounded-full bg-[#171715]/90 backdrop-blur-md text-[#FCFBF8] text-[10px] sm:text-[11px] font-bold tracking-[0.08em] uppercase border border-white/15 shadow-md pointer-events-none">
+            Sesudah (Hasil Jadi)
           </div>
 
           {/* Vertical Divider Line with Glow */}

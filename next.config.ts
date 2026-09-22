@@ -28,6 +28,8 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  devIndicators: false,
+  allowedDevOrigins: ["192.168.1.25", "192.168.1.25:3000", "localhost:3000"],
   poweredByHeader: false,
   images: {
     remotePatterns: [
