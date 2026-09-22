@@ -10,6 +10,8 @@ import { Button } from "@/components/ui/Button";
 import { generateWhatsAppLink } from "@/lib/whatsapp";
 import { Check, X, MessageCircle, ArrowRight, ShieldCheck } from "lucide-react";
 
+import { SITE_CONFIG } from "@/config/site";
+
 export async function generateMetadata({
   params,
 }: {
@@ -19,13 +21,45 @@ export async function generateMetadata({
   const mat = MATERIALS_DATA.find((m) => m.slug === slug);
   if (!mat) return { title: "Material Kitchen Set Sukabumi" };
 
+  const pageUrl = `${SITE_CONFIG.url}/material/${mat.slug}`;
+  const ogImageUrl = mat.imageUrl.startsWith("http")
+    ? mat.imageUrl
+    : `${SITE_CONFIG.url}${mat.imageUrl}`;
+
   return {
-    title: `${mat.name} - Spesifikasi & Karakteristik | KitchenSetSukabumi.id`,
-    description: mat.shortDesc,
+    title: `${mat.name} - Spesifikasi & Karakteristik Material | KitchenSetSukabumi.id`,
+    description: `${mat.shortDesc} Pelajari kelebihan, ketahanan air, dan penerapannya untuk kitchen set custom di Sukabumi.`,
+    keywords: [
+      mat.name.toLowerCase(),
+      `material ${mat.name.toLowerCase()} sukabumi`,
+      `spesifikasi ${mat.name.toLowerCase()}`,
+      "bahan kitchen set sukabumi",
+      "kitchen set custom sukabumi",
+    ],
+    alternates: {
+      canonical: pageUrl,
+    },
     openGraph: {
-      title: mat.name,
+      title: `${mat.name} - Material Kitchen Set Sukabumi`,
       description: mat.shortDesc,
-      images: [{ url: mat.imageUrl }],
+      url: pageUrl,
+      siteName: SITE_CONFIG.name,
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 800,
+          alt: mat.name,
+        },
+      ],
+      locale: "id_ID",
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${mat.name} - Spesifikasi Material`,
+      description: mat.shortDesc,
+      images: [ogImageUrl],
     },
   };
 }
@@ -42,6 +76,33 @@ export default async function MaterialDetailPage({
     notFound();
   }
 
+  const pageUrl = `${SITE_CONFIG.url}/material/${mat.slug}`;
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Beranda",
+        item: SITE_CONFIG.url,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Material & Finishing",
+        item: `${SITE_CONFIG.url}/material`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: mat.name,
+        item: pageUrl,
+      },
+    ],
+  };
+
   const waPrefill = generateWhatsAppLink({
     service: `Spesifikasi Bahan ${mat.name}`,
     customMessage: `Halo Kitchen Set Sukabumi, saya ingin tanya lebih lanjut tentang penggunaan material "${mat.name}" untuk kitchen set rumah saya. Apakah cocok untuk dapur saya?`,
@@ -49,6 +110,10 @@ export default async function MaterialDetailPage({
 
   return (
     <div className="bg-editorial-50/40 min-h-screen py-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <Breadcrumb
           items={[

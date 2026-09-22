@@ -8,15 +8,74 @@ import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { Check, X, ArrowRight } from "lucide-react";
 
+import { SITE_CONFIG } from "@/config/site";
+
 export const metadata: Metadata = {
-  title: "Panduan & Spesifikasi Material Kitchen Set Sukabumi",
+  title: "Panduan & Katalog Material Kitchen Set Sukabumi | Multiplek 18mm & HPL Taco",
   description:
-    "Edukasi bahan kitchen set Sukabumi: Multiplek 18mm, HMR, HPL Taco, Cat Duco PU, Granit Nero, Solid Surface, dan hardware soft-close.",
+    "Edukasi bahan kitchen set Sukabumi: Multiplek 18mm meranti, HMR anti air, HPL Taco, Duco PU, Top Table Granit Nero, Solid Surface, dan hardware soft-close bergaransi.",
+  keywords: [
+    "material kitchen set sukabumi",
+    "multiplek kitchen set sukabumi",
+    "hpl taco sukabumi",
+    "top table granit sukabumi",
+    "kitchen set anti rayap sukabumi",
+    "harga bahan kitchen set",
+  ],
+  alternates: {
+    canonical: `${SITE_CONFIG.url}/material`,
+  },
+  openGraph: {
+    title: "Panduan & Katalog Material Kitchen Set Sukabumi | KitchenSetSukabumi.id",
+    description:
+      "Perbandingan objektif material bodi plywood/multiplek 18mm vs serbuk kayu, finishing HPL vs Duco, dan top table granit.",
+    url: `${SITE_CONFIG.url}/material`,
+    siteName: SITE_CONFIG.name,
+    images: [
+      {
+        url: `${SITE_CONFIG.url}/images/materials/plywood.webp`,
+        width: 1200,
+        height: 800,
+        alt: "Material Plywood Multiplek Kitchen Set Sukabumi",
+      },
+    ],
+    locale: "id_ID",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Panduan & Material Kitchen Set Sukabumi",
+    description: "Kenali bahan baku kitchen set berkualitas agar dapur tahan belasan tahun.",
+    images: [`${SITE_CONFIG.url}/images/materials/plywood.webp`],
+  },
 };
 
 export default function MaterialPage() {
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Beranda",
+        item: SITE_CONFIG.url,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Material & Finishing",
+        item: `${SITE_CONFIG.url}/material`,
+      },
+    ],
+  };
+
   return (
     <div className="bg-editorial-50/40 min-h-screen py-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <Breadcrumb items={[{ name: "Material & Finishing" }]} />
 

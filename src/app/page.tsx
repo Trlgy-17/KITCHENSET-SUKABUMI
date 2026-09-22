@@ -1,4 +1,5 @@
 import React from "react";
+import { Metadata } from "next";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { TrustStrip } from "@/components/sections/TrustStrip";
 import { AboutSection } from "@/components/sections/AboutSection";
@@ -12,10 +13,56 @@ import { MaterialEducationSection } from "@/components/sections/MaterialEducatio
 import { FAQSection } from "@/components/sections/FAQSection";
 import { InstagramSection } from "@/components/sections/InstagramSection";
 import { FinalConversionSection } from "@/components/sections/FinalConversionSection";
+import { FAQS_DATA } from "@/data/faqs";
+import { SITE_CONFIG } from "@/config/site";
+
+export const metadata: Metadata = {
+  title: "Jasa Kitchen Set Sukabumi | Custom Interior & Kitchen Minimalis Modern",
+  description:
+    "Pusat pembuatan kitchen set custom berkualitas di Sukabumi. Menggunakan bahan multiplek 18mm, PVC board waterproof, finishing HPL Taco, survei lokasi gratis, dan garansi 6 bulan.",
+  keywords: [
+    "kitchen set sukabumi",
+    "jasa kitchen set sukabumi",
+    "harga kitchen set sukabumi",
+    "kitchen set minimalis sukabumi",
+    "kitchen set modern sukabumi",
+    "kitchen set cisaat",
+    "kitchen set cibadak",
+    "kitchen set cicurug",
+    "kitchen set palabuhanratu",
+    "kitchen set sukaraja",
+    "pembuatan kitchen set sukabumi",
+    "tukang kitchen set sukabumi",
+    "renovasi dapur sukabumi",
+    "custom furniture sukabumi",
+    "interior dapur sukabumi",
+  ],
+  alternates: {
+    canonical: SITE_CONFIG.url,
+  },
+};
 
 export default function HomePage() {
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: FAQS_DATA.slice(0, 8).map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+
       {/* 1. Hero Section (Point 17) */}
       <HeroSection />
 

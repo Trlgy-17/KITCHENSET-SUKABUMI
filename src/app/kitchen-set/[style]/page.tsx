@@ -101,13 +101,49 @@ const STYLE_INFO: Record<string, StyleData> = {
   },
 };
 
+import { SITE_CONFIG } from "@/config/site";
+
 export async function generateMetadata({ params }: { params: Promise<{ style: string }> }): Promise<Metadata> {
   const { style } = await params;
   const data = STYLE_INFO[style];
   if (!data) return { title: "Kitchen Set Sukabumi" };
+
+  const canonicalUrl = `${SITE_CONFIG.url}/kitchen-set/${style}`;
+
   return {
     title: `${data.title} | KitchenSetSukabumi.id`,
     description: `${data.description} Plywood 18mm, HPL Taco, survey lokasi gratis di Sukabumi.`,
+    keywords: [
+      data.title.toLowerCase(),
+      `jasa ${data.title.toLowerCase()}`,
+      `harga ${data.title.toLowerCase()}`,
+      "kitchen set custom sukabumi",
+      "kitchen set sukabumi",
+      "kitchen set cisaat",
+      "kitchen set cibadak",
+    ],
+    openGraph: {
+      title: `${data.title} | KitchenSetSukabumi.id`,
+      description: data.description,
+      url: canonicalUrl,
+      images: [
+        {
+          url: data.image,
+          width: 1200,
+          height: 800,
+          alt: data.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${data.title} | KitchenSetSukabumi.id`,
+      description: data.description,
+      images: [data.image],
+    },
+    alternates: {
+      canonical: canonicalUrl,
+    },
   };
 }
 
@@ -118,6 +154,31 @@ export default async function KitchenSetStylePage({ params }: { params: Promise<
   if (!data) {
     notFound();
   }
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: SITE_CONFIG.url,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Kitchen Set",
+        item: `${SITE_CONFIG.url}/kitchen-set`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: data.title,
+        item: `${SITE_CONFIG.url}/kitchen-set/${style}`,
+      },
+    ],
+  };
 
   const relatedProjects = PROJECTS_DATA.filter((p) => {
     if (style === "letter-l") return p.layout === "letter_l";
@@ -131,6 +192,10 @@ export default async function KitchenSetStylePage({ params }: { params: Promise<
 
   return (
     <div className="bg-editorial-50/40 min-h-screen py-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <Breadcrumb
           items={[

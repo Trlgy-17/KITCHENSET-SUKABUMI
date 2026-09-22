@@ -11,6 +11,8 @@ import { Card } from "@/components/ui/Card";
 import { generateWhatsAppLink } from "@/lib/whatsapp";
 import { MapPin, CheckCircle2, MessageCircle, ArrowRight, ShieldCheck, Ruler } from "lucide-react";
 
+import { SITE_CONFIG } from "@/config/site";
+
 export async function generateMetadata({
   params,
 }: {
@@ -20,9 +22,41 @@ export async function generateMetadata({
   const area = SERVICE_AREAS.find((a) => a.slug === slug);
   if (!area) return { title: "Area Layanan Sukabumi" };
 
+  const canonicalUrl = `${SITE_CONFIG.url}/area-layanan/${slug}`;
+
   return {
     title: `${area.seoTitle} | KitchenSetSukabumi.id`,
     description: area.seoDescription,
+    keywords: [
+      `kitchen set ${area.name.toLowerCase()}`,
+      `jasa kitchen set ${area.name.toLowerCase()}`,
+      `kitchen set minimalis ${area.name.toLowerCase()}`,
+      `pembuatan kitchen set ${area.name.toLowerCase()}`,
+      `kitchen set sukabumi`,
+      `custom interior ${area.name.toLowerCase()}`,
+    ],
+    openGraph: {
+      title: `${area.seoTitle} | KitchenSetSukabumi.id`,
+      description: area.seoDescription,
+      url: canonicalUrl,
+      images: [
+        {
+          url: `${SITE_CONFIG.url}/images/portfolio/portfolio-1.webp`,
+          width: 1200,
+          height: 800,
+          alt: `Kitchen Set Area ${area.name}`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${area.seoTitle} | KitchenSetSukabumi.id`,
+      description: area.seoDescription,
+      images: [`${SITE_CONFIG.url}/images/portfolio/portfolio-1.webp`],
+    },
+    alternates: {
+      canonical: canonicalUrl,
+    },
   };
 }
 
@@ -37,6 +71,48 @@ export default async function AreaDetailPage({
   if (!area) {
     notFound();
   }
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: SITE_CONFIG.url,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Area Layanan",
+        item: `${SITE_CONFIG.url}/area-layanan`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: area.name,
+        item: `${SITE_CONFIG.url}/area-layanan/${slug}`,
+      },
+    ],
+  };
+
+  const serviceAreaJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: `Jasa Pembuatan Kitchen Set & Interior Custom ${area.name}`,
+    description: area.seoDescription,
+    provider: {
+      "@type": "HomeAndConstructionBusiness",
+      name: SITE_CONFIG.name,
+      url: SITE_CONFIG.url,
+      telephone: SITE_CONFIG.phone,
+    },
+    areaServed: {
+      "@type": "AdministrativeArea",
+      name: `${area.name}, Sukabumi, Jawa Barat`,
+    },
+  };
 
   // Filter projects in or near this area
   const areaProjects = PROJECTS_DATA.filter((p) =>
@@ -55,6 +131,14 @@ export default async function AreaDetailPage({
 
   return (
     <div className="bg-editorial-50/40 min-h-screen py-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceAreaJsonLd) }}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <Breadcrumb
           items={[

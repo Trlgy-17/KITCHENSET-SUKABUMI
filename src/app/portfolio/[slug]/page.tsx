@@ -21,6 +21,8 @@ import {
   ShieldCheck,
 } from "lucide-react";
 
+import { SITE_CONFIG } from "@/config/site";
+
 export async function generateMetadata({
   params,
 }: {
@@ -30,13 +32,43 @@ export async function generateMetadata({
   const project = PROJECTS_DATA.find((p) => p.slug === slug);
   if (!project) return { title: "Proyek Kitchen Set Sukabumi" };
 
+  const canonicalUrl = `${SITE_CONFIG.url}/portfolio/${slug}`;
+  const imageUrl = project.coverImage.startsWith("http")
+    ? project.coverImage
+    : `${SITE_CONFIG.url}${project.coverImage}`;
+
   return {
     title: `${project.title} | KitchenSetSukabumi.id`,
     description: project.summary,
+    keywords: [
+      project.title.toLowerCase(),
+      `kitchen set ${project.location.toLowerCase()}`,
+      `kitchen set ${project.city.toLowerCase()}`,
+      "portofolio kitchen set sukabumi",
+      "hasil pengerjaan kitchen set sukabumi",
+      "foto kitchen set asli sukabumi",
+    ],
     openGraph: {
       title: project.title,
       description: project.summary,
-      images: [{ url: project.coverImage }],
+      url: canonicalUrl,
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 800,
+          alt: project.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: project.title,
+      description: project.summary,
+      images: [imageUrl],
+    },
+    alternates: {
+      canonical: canonicalUrl,
     },
   };
 }
@@ -53,6 +85,51 @@ export default async function ProjectDetailPage({
     notFound();
   }
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: SITE_CONFIG.url,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Portofolio",
+        item: `${SITE_CONFIG.url}/portfolio`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: project.title,
+        item: `${SITE_CONFIG.url}/portfolio/${slug}`,
+      },
+    ],
+  };
+
+  const projectJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: project.title,
+    headline: project.title,
+    description: project.summary,
+    image: project.coverImage.startsWith("http")
+      ? project.coverImage
+      : `${SITE_CONFIG.url}${project.coverImage}`,
+    creator: {
+      "@type": "HomeAndConstructionBusiness",
+      name: SITE_CONFIG.name,
+      url: SITE_CONFIG.url,
+    },
+    contentLocation: {
+      "@type": "Place",
+      name: `${project.location}, ${project.city}`,
+    },
+  };
+
   const relatedProjects = PROJECTS_DATA.filter((p) => p.id !== project.id).slice(0, 3);
 
   const waPrefill = generateWhatsAppLink({
@@ -63,6 +140,14 @@ export default async function ProjectDetailPage({
 
   return (
     <div className="bg-editorial-50/40 min-h-screen py-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(projectJsonLd) }}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <Breadcrumb
           items={[

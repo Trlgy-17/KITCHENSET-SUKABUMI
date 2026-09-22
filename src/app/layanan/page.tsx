@@ -8,15 +8,109 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 
+import { SITE_CONFIG } from "@/config/site";
+
 export const metadata: Metadata = {
-  title: "Layanan Desain Interior & Kitchen Set Custom Sukabumi",
+  title: "Layanan Kitchen Set & Custom Interior Sukabumi | KitchenSetSukabumi.id",
   description:
-    "Layanan komprehensif kitchen set custom, renovasi dapur lama, interior rumah tinggal, dan lemari pakaian (wardrobe) custom di Kota dan Kabupaten Sukabumi.",
+    "Solusi lengkap pembuatan kitchen set minimalis modern, renovasi dapur lama, interior rumah tinggal, walk-in closet, dan backdrop TV custom di Kota & Kabupaten Sukabumi bergaransi.",
+  keywords: [
+    "layanan kitchen set sukabumi",
+    "jasa kitchen set sukabumi",
+    "renovasi dapur sukabumi",
+    "custom furniture sukabumi",
+    "interior rumah sukabumi",
+    "wardrobe custom sukabumi",
+    "kitchen set cisaat",
+    "kitchen set cibadak",
+  ],
+  alternates: {
+    canonical: `${SITE_CONFIG.url}/layanan`,
+  },
+  openGraph: {
+    title: "Layanan Kitchen Set & Custom Interior Sukabumi | KitchenSetSukabumi.id",
+    description:
+      "Layanan spesialis kitchen set custom, renovasi dapur, dan interior hunian di Sukabumi. Material multiplek 18mm kokoh dan garansi 6 bulan.",
+    url: `${SITE_CONFIG.url}/layanan`,
+    siteName: SITE_CONFIG.name,
+    images: [
+      {
+        url: `${SITE_CONFIG.url}/images/portfolio/portfolio-1.webp`,
+        width: 1200,
+        height: 800,
+        alt: "Layanan Desain dan Pembuatan Kitchen Set Sukabumi",
+      },
+    ],
+    locale: "id_ID",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Layanan Kitchen Set & Interior Custom Sukabumi",
+    description: "Spesialis custom kitchen set dan interior bergaransi di Sukabumi.",
+    images: [`${SITE_CONFIG.url}/images/portfolio/portfolio-1.webp`],
+  },
 };
 
 export default function LayananPage() {
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Beranda",
+        item: SITE_CONFIG.url,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Layanan",
+        item: `${SITE_CONFIG.url}/layanan`,
+      },
+    ],
+  };
+
+  const servicesListSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Layanan Kitchen Set dan Interior Sukabumi",
+    description: "Daftar layanan spesialis desain interior dan kitchen set custom di Sukabumi",
+    itemListElement: SERVICES_DATA.map((srv, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "Service",
+        name: srv.title,
+        description: srv.shortDesc,
+        url: `${SITE_CONFIG.url}/layanan/${srv.slug}`,
+        provider: {
+          "@type": "HomeAndConstructionBusiness",
+          name: SITE_CONFIG.name,
+          telephone: SITE_CONFIG.phone,
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: SITE_CONFIG.address.street,
+            addressLocality: SITE_CONFIG.address.city,
+            addressRegion: SITE_CONFIG.address.region,
+            addressCountry: "ID",
+          },
+        },
+      },
+    })),
+  };
+
   return (
     <div className="bg-editorial-50/40 min-h-screen py-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesListSchema) }}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <Breadcrumb items={[{ name: "Layanan" }]} />
 

@@ -22,44 +22,73 @@ const instrumentSerif = Instrument_Serif({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_CONFIG.url),
   title: {
-    default: "Kitchen Set Sukabumi | Custom Interior & Furniture",
+    default: "Kitchen Set Sukabumi | Custom Interior & Kitchen Minimalis Modern",
     template: `%s | ${SITE_CONFIG.name}`,
   },
   description:
-    "Jasa kitchen set dan interior custom di Sukabumi. Mulai dari konsultasi, survei, desain, pemilihan material, produksi hingga instalasi dengan alur kerja dan RAB yang transparan.",
+    "Jasa kitchen set dan interior custom di Sukabumi. Spesialis kitchen set minimalis modern, backdrop TV, lemari bawah tangga, dan wardrobe. Survei lokasi gratis, RAB transparan, dan garansi pemeliharaan 6 bulan.",
   keywords: [
     "kitchen set sukabumi",
-    "kitchen set custom sukabumi",
     "jasa kitchen set sukabumi",
+    "harga kitchen set sukabumi",
+    "kitchen set custom sukabumi",
     "kitchen set minimalis sukabumi",
     "kitchen set modern sukabumi",
     "kitchen set cisaat",
     "kitchen set cibadak",
-    "renovasi dapur sukabumi",
+    "kitchen set cicurug",
+    "kitchen set palabuhanratu",
+    "kitchen set sukaraja",
+    "pembuatan kitchen set sukabumi",
+    "tukang kitchen set sukabumi",
+    "kitchen set hpl sukabumi",
+    "lemari dapur sukabumi",
     "custom furniture sukabumi",
+    "renovasi dapur sukabumi",
     "interior sukabumi",
   ],
   authors: [{ name: SITE_CONFIG.name, url: SITE_CONFIG.url }],
   creator: SITE_CONFIG.name,
+  publisher: SITE_CONFIG.name,
+  formatDetection: {
+    telephone: true,
+    address: true,
+    email: true,
+  },
   openGraph: {
     type: "website",
     locale: "id_ID",
     url: SITE_CONFIG.url,
     title: `${SITE_CONFIG.name} | Jasa Pembuatan Kitchen Set Custom Sukabumi`,
-    description: SITE_CONFIG.description,
+    description:
+      "Jasa kitchen set custom berkualitas di Sukabumi. Multiplek 18mm, PVC anti-rayap, finishing HPL Taco, survei lokasi gratis, dan garansi 6 bulan.",
     siteName: SITE_CONFIG.name,
     images: [
       {
-        url: "/images/portfolio/portfolio-1.webp",
+        url: `${SITE_CONFIG.url}/images/portfolio/portfolio-1.webp`,
         width: 1200,
         height: 800,
         alt: "Kitchen Set Custom Sukabumi",
       },
     ],
   },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE_CONFIG.name} | Jasa Pembuatan Kitchen Set Custom Sukabumi`,
+    description:
+      "Jasa kitchen set custom di Sukabumi. Survei gratis, layout 2D, RAB transparan, dan garansi pemeliharaan 6 bulan.",
+    images: [`${SITE_CONFIG.url}/images/portfolio/portfolio-1.webp`],
+  },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
   alternates: {
     canonical: "./",
@@ -76,16 +105,21 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // LocalBusiness Schema (PRD Section 20.2)
+  // Enhanced Schema.org LocalBusiness & HomeAndConstructionBusiness
   const schemaOrgJsonLd = {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
+    "@type": ["HomeAndConstructionBusiness", "LocalBusiness", "GeneralContractor"],
     name: SITE_CONFIG.name,
+    legalName: SITE_CONFIG.legalName,
     image: `${SITE_CONFIG.url}/images/portfolio/portfolio-1.webp`,
-    "@id": SITE_CONFIG.url,
+    "@id": `${SITE_CONFIG.url}/#organization`,
     url: SITE_CONFIG.url,
     telephone: SITE_CONFIG.phone,
-    priceRange: "$$",
+    email: SITE_CONFIG.email,
+    priceRange: "Rp 1.950.000 - Rp 3.500.000 / meter",
+    currenciesAccepted: "IDR",
+    paymentAccepted: "Cash, Bank Transfer",
+    description: SITE_CONFIG.description,
     address: {
       "@type": "PostalAddress",
       streetAddress: SITE_CONFIG.address.street,
@@ -115,12 +149,64 @@ export default function RootLayout({
       },
     ],
     areaServed: SITE_CONFIG.serviceAreas.map((area) => ({
-      "@type": "Place",
-      name: `${area}, Sukabumi`,
+      "@type": "AdministrativeArea",
+      name: `${area}, Sukabumi, Jawa Barat`,
     })),
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "4.9",
+      reviewCount: "48",
+      bestRating: "5",
+      worstRating: "1",
+    },
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Layanan Kitchen Set & Interior Custom Sukabumi",
+      itemListElement: [
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Pembuatan Kitchen Set Minimalis & Modern",
+            description: "Custom kitchen set berbahan multipleks 18mm & PVC waterproof dengan finishing HPL atau Duco.",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Backdrop TV & Lemari Partisi Ruang",
+            description: "Backdrop TV modern dengan kisi-kisi wall panel, storage terintegrasi, dan ambient LED strip.",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Lemari Bawah Tangga Custom",
+            description: "Pemanfaatan sudut mati bawah tangga menjadi lemari simpan cerdas, rak sepatu, dan pantry.",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Custom Wardrobe & Lemari Pakaian",
+            description: "Wardrobe full-plafon dengan pintu sliding kaca tinted atau swing profil mewah.",
+          },
+        },
+      ],
+    },
     sameAs: [
-      "https://instagram.com/kitchensetsukabumi.id",
+      "https://www.instagram.com/kitchensetsukabumi.id/",
     ],
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: SITE_CONFIG.phone,
+      contactType: "customer service",
+      areaServed: "ID",
+      availableLanguage: ["Indonesian", "Sundanese"],
+    },
   };
 
   return (

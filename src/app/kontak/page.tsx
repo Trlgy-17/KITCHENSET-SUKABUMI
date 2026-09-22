@@ -9,9 +9,42 @@ import { MapPin, Phone, Mail, Clock, MessageCircle, ArrowRight } from "lucide-re
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Kontak & Alamat Workshop | Kitchen Set Sukabumi",
+  title: "Kontak & Alamat Workshop Kitchen Set Sukabumi | Konsultasi & Survey Lokasi",
   description:
-    "Hubungi tim Kitchen Set Sukabumi melalui WhatsApp resmi, telepon, email, atau kunjungi alamat studio workshop kami di Jl. Bhayangkara, Kota Sukabumi.",
+    "Hubungi tim Kitchen Set Sukabumi melalui WhatsApp 0812-2497-7989, telepon, atau kunjungi workshop di Jl. Bhayangkara, Kota Sukabumi. Siap survey ke seluruh wilayah Sukabumi.",
+  keywords: [
+    "kontak kitchen set sukabumi",
+    "nomor telepon kitchen set sukabumi",
+    "whatsapp kitchen set sukabumi",
+    "alamat workshop kitchen set sukabumi",
+    "lokasi kitchen set sukabumi",
+  ],
+  alternates: {
+    canonical: `${SITE_CONFIG.url}/kontak`,
+  },
+  openGraph: {
+    title: "Kontak & Alamat Workshop Kitchen Set Sukabumi",
+    description:
+      "Hubungi tim Kitchen Set Sukabumi untuk konsultasi gratis dan survey lokasi ke rumah Anda di Sukabumi.",
+    url: `${SITE_CONFIG.url}/kontak`,
+    siteName: SITE_CONFIG.name,
+    images: [
+      {
+        url: `${SITE_CONFIG.url}/images/portfolio/portfolio-1.webp`,
+        width: 1200,
+        height: 800,
+        alt: "Kontak Kitchen Set Sukabumi",
+      },
+    ],
+    locale: "id_ID",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Kontak Kitchen Set Sukabumi",
+    description: "WhatsApp resmi 0812-2497-7989 dan lokasi workshop di Kota Sukabumi.",
+    images: [`${SITE_CONFIG.url}/images/portfolio/portfolio-1.webp`],
+  },
 };
 
 export default function KontakPage() {
@@ -19,8 +52,63 @@ export default function KontakPage() {
     customMessage: "Halo Kitchen Set Sukabumi, saya ingin bertanya seputar layanan kitchen set dan jadwal survey lokasi ke rumah saya di Sukabumi.",
   });
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Beranda",
+        item: SITE_CONFIG.url,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Kontak",
+        item: `${SITE_CONFIG.url}/kontak`,
+      },
+    ],
+  };
+
+  const contactPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    name: "Kontak Kitchen Set Sukabumi",
+    description: "Informasi kontak, WhatsApp resmi, dan lokasi workshop Kitchen Set Sukabumi.",
+    mainEntity: {
+      "@type": "HomeAndConstructionBusiness",
+      name: SITE_CONFIG.name,
+      telephone: SITE_CONFIG.phone,
+      email: SITE_CONFIG.email,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: SITE_CONFIG.address.street,
+        addressLocality: SITE_CONFIG.address.city,
+        addressRegion: SITE_CONFIG.address.region,
+        addressCountry: "ID",
+      },
+      openingHoursSpecification: [
+        {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+          opens: "08:00",
+          closes: "17:00",
+        },
+      ],
+    },
+  };
+
   return (
     <div className="bg-editorial-50/40 min-h-screen py-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(contactPageSchema) }}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <Breadcrumb items={[{ name: "Kontak" }]} />
 

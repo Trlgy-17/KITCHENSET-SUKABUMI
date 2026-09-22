@@ -5,15 +5,74 @@ import { Breadcrumb } from "@/components/shared/Breadcrumb";
 import { Badge } from "@/components/ui/Badge";
 import { CheckCircle2, ShieldCheck, HelpCircle } from "lucide-react";
 
+import { SITE_CONFIG } from "@/config/site";
+
 export const metadata: Metadata = {
-  title: "Kalkulator Estimasi Biaya Kitchen Set Sukabumi | KitchenSetSukabumi.id",
+  title: "Kalkulator Estimasi Biaya Kitchen Set Sukabumi | Hitung Harga Transparan",
   description:
-    "Hitung perkiraan biaya pembuatan kitchen set custom Anda di Sukabumi berdasarkan bentuk layout, panjang meter lari, material multiplek, dan pilihan top table.",
+    "Hitung estimasi akurat biaya kitchen set custom Anda di Sukabumi dalam hitungan detik. Simulasi bentuk I, L, U, Island, bahan Multiplek 18mm, dan top table granit.",
+  keywords: [
+    "harga kitchen set sukabumi",
+    "biaya kitchen set sukabumi",
+    "kalkulator kitchen set",
+    "estimasi kitchen set sukabumi",
+    "kitchen set per meter sukabumi",
+    "simulasi biaya kitchen set",
+  ],
+  alternates: {
+    canonical: `${SITE_CONFIG.url}/estimator`,
+  },
+  openGraph: {
+    title: "Kalkulator Estimasi Biaya Kitchen Set Sukabumi | Hitung Harga Transparan",
+    description:
+      "Simulasi biaya kitchen set custom Sukabumi berdasarkan layout, panjang meter lari, dan pilihan finishing tanpa biaya tersembunyi.",
+    url: `${SITE_CONFIG.url}/estimator`,
+    siteName: SITE_CONFIG.name,
+    images: [
+      {
+        url: `${SITE_CONFIG.url}/images/portfolio/portfolio-1.webp`,
+        width: 1200,
+        height: 800,
+        alt: "Kalkulator Estimasi Kitchen Set Sukabumi",
+      },
+    ],
+    locale: "id_ID",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Kalkulator Biaya Kitchen Set Sukabumi",
+    description: "Hitung perkiraan biaya kitchen set custom Anda secara transparan.",
+    images: [`${SITE_CONFIG.url}/images/portfolio/portfolio-1.webp`],
+  },
 };
 
 export default function EstimatorPage() {
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Beranda",
+        item: SITE_CONFIG.url,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Kalkulator Estimasi Biaya",
+        item: `${SITE_CONFIG.url}/estimator`,
+      },
+    ],
+  };
+
   return (
     <div className="bg-editorial-50/40 min-h-screen py-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <Breadcrumb items={[{ name: "Kalkulator Estimasi Biaya" }]} />
 

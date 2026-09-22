@@ -9,14 +9,95 @@ import { Button } from "@/components/ui/Button";
 import { MapPin, ShieldCheck, Wrench, HeartHandshake, ArrowRight } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Tentang Kami | Kitchen Set Sukabumi",
+  title: "Tentang Kami - Workshop & Tim Ahli Kitchen Set Sukabumi",
   description:
-    "Mengenal spesialis kitchen set custom dan renovasi interior terpercaya di Sukabumi. Komitmen kami terhadap material multiplek kokoh, kejujuran spesifikasi, dan pelayanan bergaransi.",
+    "Profil spesialis manufaktur kitchen set custom dan interior hunian di Sukabumi. Berpengalaman, mengutamakan standar multiplek 18mm anti-lembab, transparansi RAB, dan garansi resmi 6 bulan.",
+  keywords: [
+    "tentang kitchen set sukabumi",
+    "workshop interior sukabumi",
+    "tukang kitchen set sukabumi",
+    "spesialis interior sukabumi",
+    "jasa interior terpercaya sukabumi",
+  ],
+  alternates: {
+    canonical: `${SITE_CONFIG.url}/tentang-kami`,
+  },
+  openGraph: {
+    title: "Tentang Kami - Spesialis Kitchen Set Sukabumi",
+    description:
+      "Dedikasi manufaktur interior custom berkualitas tinggi di Sukabumi dengan material kokoh dan transparansi penuh.",
+    url: `${SITE_CONFIG.url}/tentang-kami`,
+    siteName: SITE_CONFIG.name,
+    images: [
+      {
+        url: `${SITE_CONFIG.url}/images/portfolio/portfolio-1.webp`,
+        width: 1200,
+        height: 800,
+        alt: "Workshop Kitchen Set Sukabumi",
+      },
+    ],
+    locale: "id_ID",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Tentang Kitchen Set Sukabumi",
+    description: "Kenali dedikasi kami dalam menghadirkan dapur impian berkualitas di Sukabumi.",
+    images: [`${SITE_CONFIG.url}/images/portfolio/portfolio-1.webp`],
+  },
 };
 
 export default function TentangKamiPage() {
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Beranda",
+        item: SITE_CONFIG.url,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Tentang Kami",
+        item: `${SITE_CONFIG.url}/tentang-kami`,
+      },
+    ],
+  };
+
+  const aboutPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    name: "Tentang Kitchen Set Sukabumi",
+    description:
+      "Profil spesialis manufaktur interior dan kitchen set custom di Kota dan Kabupaten Sukabumi.",
+    mainEntity: {
+      "@type": "HomeAndConstructionBusiness",
+      name: SITE_CONFIG.name,
+      description: SITE_CONFIG.description,
+      telephone: SITE_CONFIG.phone,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: SITE_CONFIG.address.street,
+        addressLocality: SITE_CONFIG.address.city,
+        addressRegion: SITE_CONFIG.address.region,
+        addressCountry: "ID",
+      },
+    },
+  };
+
   return (
     <div className="bg-editorial-50/40 min-h-screen py-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutPageSchema) }}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         <Breadcrumb items={[{ name: "Tentang Kami" }]} />
 

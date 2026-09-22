@@ -10,6 +10,8 @@ import { Button } from "@/components/ui/Button";
 import { generateWhatsAppLink } from "@/lib/whatsapp";
 import { CheckCircle2, MessageCircle, ArrowRight, ShieldCheck, HelpCircle } from "lucide-react";
 
+import { SITE_CONFIG } from "@/config/site";
+
 export async function generateMetadata({
   params,
 }: {
@@ -19,13 +21,45 @@ export async function generateMetadata({
   const srv = SERVICES_DATA.find((s) => s.slug === slug);
   if (!srv) return { title: "Layanan Interior Sukabumi" };
 
+  const pageUrl = `${SITE_CONFIG.url}/layanan/${srv.slug}`;
+  const ogImageUrl = srv.heroImage.startsWith("http")
+    ? srv.heroImage
+    : `${SITE_CONFIG.url}${srv.heroImage}`;
+
   return {
-    title: `${srv.title} | KitchenSetSukabumi.id`,
-    description: srv.shortDesc,
+    title: `${srv.title} Sukabumi | KitchenSetSukabumi.id`,
+    description: `${srv.shortDesc} Layanan profesional di Kota dan Kabupaten Sukabumi dengan material multiplek 18mm kokoh dan garansi 6 bulan.`,
+    keywords: [
+      srv.title.toLowerCase(),
+      `jasa ${srv.title.toLowerCase()} sukabumi`,
+      `spesialis ${srv.title.toLowerCase()} sukabumi`,
+      "kitchen set sukabumi",
+      "interior custom sukabumi",
+    ],
+    alternates: {
+      canonical: pageUrl,
+    },
     openGraph: {
-      title: srv.title,
+      title: `${srv.title} Sukabumi | KitchenSetSukabumi.id`,
       description: srv.shortDesc,
-      images: [{ url: srv.heroImage }],
+      url: pageUrl,
+      siteName: SITE_CONFIG.name,
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 800,
+          alt: srv.title,
+        },
+      ],
+      locale: "id_ID",
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${srv.title} Sukabumi`,
+      description: srv.shortDesc,
+      images: [ogImageUrl],
     },
   };
 }
@@ -42,6 +76,61 @@ export default async function ServiceDetailPage({
     notFound();
   }
 
+  const pageUrl = `${SITE_CONFIG.url}/layanan/${srv.slug}`;
+  const ogImageUrl = srv.heroImage.startsWith("http")
+    ? srv.heroImage
+    : `${SITE_CONFIG.url}${srv.heroImage}`;
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Beranda",
+        item: SITE_CONFIG.url,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Layanan",
+        item: `${SITE_CONFIG.url}/layanan`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: srv.title,
+        item: pageUrl,
+      },
+    ],
+  };
+
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: srv.title,
+    description: srv.shortDesc,
+    url: pageUrl,
+    image: ogImageUrl,
+    provider: {
+      "@type": "HomeAndConstructionBusiness",
+      name: SITE_CONFIG.name,
+      telephone: SITE_CONFIG.phone,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: SITE_CONFIG.address.street,
+        addressLocality: SITE_CONFIG.address.city,
+        addressRegion: SITE_CONFIG.address.region,
+        addressCountry: "ID",
+      },
+    },
+    areaServed: {
+      "@type": "AdministrativeArea",
+      name: "Sukabumi",
+    },
+  };
+
   const waPrefill = generateWhatsAppLink({
     service: srv.title,
     customMessage: `Halo Kitchen Set Sukabumi, saya ingin konsultasi mengenai layanan "${srv.title}". Mohon informasi alur pengerjaan dan estimasi survey ke rumah saya di Sukabumi.`,
@@ -49,6 +138,14 @@ export default async function ServiceDetailPage({
 
   return (
     <div className="bg-editorial-50/40 min-h-screen py-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <Breadcrumb
           items={[
