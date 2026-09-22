@@ -200,14 +200,6 @@ export function BeforeAfterSection() {
             />
           </div>
 
-          {/* Persistent Floating Badges - Placed at z-25 above both layers so they NEVER disappear or get clipped when dragged */}
-          <div className="absolute bottom-3 sm:bottom-5 left-3 sm:left-5 z-25 px-3.5 sm:px-4 py-1.5 rounded-full bg-[#171715]/90 backdrop-blur-md text-[#FCFBF8] text-[10px] sm:text-[11px] font-bold tracking-[0.08em] uppercase border border-white/15 shadow-md pointer-events-none">
-            Sebelum Renovasi
-          </div>
-          <div className="absolute bottom-3 sm:bottom-5 right-3 sm:right-5 z-25 px-3.5 sm:px-4 py-1.5 rounded-full bg-[#171715]/90 backdrop-blur-md text-[#FCFBF8] text-[10px] sm:text-[11px] font-bold tracking-[0.08em] uppercase border border-white/15 shadow-md pointer-events-none">
-            Sesudah (Hasil Jadi)
-          </div>
-
           {/* Vertical Divider Line with Glow */}
           <div
             className="absolute top-0 bottom-0 z-20 w-[2px] bg-white pointer-events-none shadow-[0_0_12px_rgba(0,0,0,0.5)] will-change-[left]"
@@ -228,8 +220,25 @@ export function BeforeAfterSection() {
             </div>
           </div>
 
-          {/* Hint Overlay for first-time hover */}
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 px-3.5 py-1.5 rounded-full bg-[#171715]/80 backdrop-blur-md text-white/95 text-[11px] font-medium tracking-wide pointer-events-none opacity-90 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-2 shadow-sm border border-white/10">
+          {/* Persistent Floating Badges - Fixed zIndex 30 above all layers, solid background so GPU never drops it */}
+          <div
+            style={{ zIndex: 30 }}
+            className="absolute bottom-3 sm:bottom-5 left-3 sm:left-5 px-3.5 sm:px-4 py-1.5 rounded-full bg-[#181715] text-[#FCFBF8] text-[10px] sm:text-[11px] font-bold tracking-[0.08em] uppercase border border-white/20 shadow-lg pointer-events-none select-none"
+          >
+            Sebelum Renovasi
+          </div>
+          <div
+            style={{ zIndex: 30 }}
+            className="absolute bottom-3 sm:bottom-5 right-3 sm:right-5 px-3.5 sm:px-4 py-1.5 rounded-full bg-[#181715] text-[#FCFBF8] text-[10px] sm:text-[11px] font-bold tracking-[0.08em] uppercase border border-white/20 shadow-lg pointer-events-none select-none"
+          >
+            Sesudah (Hasil Jadi)
+          </div>
+
+          {/* Hint Overlay - Fixed zIndex 30 above divider line */}
+          <div
+            style={{ zIndex: 30 }}
+            className="absolute top-3.5 sm:top-4 left-1/2 -translate-x-1/2 px-3.5 py-1.5 rounded-full bg-[#181715] text-white text-[11px] font-medium tracking-wide pointer-events-none flex items-center gap-2 shadow-lg border border-white/20 select-none whitespace-nowrap"
+          >
             <SlidersHorizontal className="w-3.5 h-3.5 text-[#A86E4C]" />
             <span>Tarik atau klik untuk menggeser</span>
           </div>
